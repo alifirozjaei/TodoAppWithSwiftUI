@@ -8,11 +8,32 @@
 import SwiftUI
 
 struct TodoListItemView: View {
+    let item: ToDoListItem
+    let toggleAction: (ToDoListItem) -> Void
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack(alignment:.center) {
+            VStack(alignment:.leading) {
+                Text(item.title)
+                    .font(.headline)
+                Text("\(Date(timeIntervalSince1970: item.duDate).formatted(date: .abbreviated, time: .shortened))")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            
+            Spacer()
+            
+            Button {
+                toggleAction(item)
+            } label: {
+                Image(systemName: item.isDone ? "checkmark.circle" : "circle")
+                    .foregroundStyle(item.isDone ? .green : .primary)
+                    .font(.system(size: 20))
+            }
+        }
     }
 }
 
-#Preview {
-    TodoListItemView()
-}
+//#Preview {
+//    TodoListItemView()
+//}

@@ -6,13 +6,47 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestoreSwift
 
 struct ToDoListView: View {
+    @StateObject var viewModel = ToDoListViewViewModel()
+    @FirestoreQuery(collectionPath: "/users/\(Auth.auth().currentUser?.uid ?? "")/todos") var items: [ToDoListItem]
+    
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            VStack {
+                List {
+                    ForEach(items) { item in
+                        TodoListItemView(item: item, toggleAction: viewModel.toggleState)
+                    }
+                    .onDelete(perform: { indexSet in
+                        viewModel.deleteItem(id: items[indexSet.first!].id)
+                    })
+                }
+            }.navigationTitle("Todo List")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    Button {
+                        viewModel.showSheet = true
+                    } label: {
+                        Image(systemName: "plus.circle")
+                    }
+                }
+                .sheet(isPresented: $viewModel.showSheet, content: {
+                    NewItemView()
+                })
+            
+            NavigationLink(destination: NewItemView(), label: {
+                Image(systemName: "plus.circle")
+            })
+        }
     }
+    
+
 }
 
-#Preview {
-    ToDoListView()
-}
+//#Preview {
+//    ToDoListView()
+//}

@@ -8,11 +8,33 @@
 import SwiftUI
 
 struct HeaderView: View {
+    let title: String
+    let subTitle: String
+    let angel: Double
+    let background: Color
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundStyle(background)
+                .rotationEffect(.degrees(angel))
+            
+            VStack {
+                Text(title)
+                    .font(.system(size: 50))
+                    .foregroundStyle(.white)
+                    .bold()
+                
+                Text(subTitle)
+                    .font(.headline)
+                    .foregroundStyle(.white)
+            }
+        }
+        .frame(width: UIScreen.main.bounds.width * 3, height: 300)
+        .offset(y: -100)
     }
 }
 
 #Preview {
-    HeaderView()
+    HeaderView(title: "Test Title", subTitle: "test subtitle", angel: 20, background: .red)
 }

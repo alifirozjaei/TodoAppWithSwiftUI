@@ -2,25 +2,38 @@
 //  ContentView.swift
 //  Todo
 //
-//  Created by 1 on 12/1/1402 AP.
+//  Created by 1 on 12/1/‍1402 AP.
 //
 
-import FirebaseCore
+
 
 import SwiftUI
 
 struct ContentView: View {
-    init () {
-        FirebaseApp.configure()
-    }
+    @StateObject var viewModel = ContentViewViewViewModel()
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        if viewModel.isSiginIn && !viewModel.currentUserId.isEmpty {
+            accountView
+        } else {
+            NavigationView {
+                LoginView()
+            }
         }
-        .padding()
+    }
+    
+    
+    @ViewBuilder
+    var accountView: some View {
+        TabView {
+            ToDoListView()
+                .tabItem {
+                    Label("Home", systemImage: "house")
+                }
+            ProfileView()
+                .tabItem {
+                    Label("Profile", systemImage: "person")
+                }
+        }
     }
 }
 
